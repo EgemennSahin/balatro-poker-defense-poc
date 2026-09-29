@@ -1,15 +1,15 @@
-# Poker Defense POC
+# Tower Defense MVP
 
-A small Balatro + tower defense proof of concept built as a Steamodded mod. It tests one question: **does playing poker hands to activate a lane of card towers feel fun?**
+A tiny tower defense game inside Balatro. Choose the **Tower Defense** deck when you start a run; it starts the defense board for you.
 
 ## Prototype loop
 
-- Buy the Common **Lane Commander** Joker to start the prototype.
+- Choose the **Tower Defense** deck. It starts with the Defense Board Joker, which is the lane display and game controller.
 - The first 8 unique cards in your scoring hands fill 8 fixed tower slots.
 - Playing those physical cards activates their tower. Rank sets damage; suit adds an effect.
 - Enemies move along a single 8-slot lane. Leaks reduce your 10 lives.
 - Five waves use normal, fast, armored, mixed, and boss enemies.
-- The lane is drawn on the Joker card with no custom art. Run the normal Balatro blind at the same time; lane damage also adds chips.
+- The lane and enemy are drawn on the Defense Board with no custom art. Played hands operate the defense; lane damage also adds chips.
 
 ### Card and hand effects
 
@@ -24,13 +24,13 @@ A small Balatro + tower defense proof of concept built as a Steamodded mod. It t
 | Straight | +2 damage per shot |
 | Flush | +2 damage per shot |
 
-This prototype keeps vanilla scoring and the shop. Towers are created automatically in the order cards first score, so there is no placement screen.
+Towers are created automatically from the first 8 unique cards that score, so there is no placement screen. The Defense Board is hidden from ordinary Joker pools; use the Tower Defense deck to launch this mode.
 
 ## Install
 
 1. Install Lovely and Steamodded for your Balatro version.
 2. Copy `main.lua`, `mod.json`, and `lovely.toml` into `%AppData%\Balatro\Mods\PokerDefensePOC\`.
-3. Launch Balatro. Buy **Lane Commander** from the Joker shop and play scoring hands.
+3. Launch Balatro, choose **New Run**, then select the **Tower Defense** deck in the deck picker.
 
 The lane state is stored in `G.GAME` and should follow the run save. Debug events are tagged `PokerDefense` in the Lovely log. `lovely.toml` contains compatibility patches for the old local game build.
 
