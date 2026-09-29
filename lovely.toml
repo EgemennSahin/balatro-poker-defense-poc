@@ -1,0 +1,57 @@
+[manifest]
+version = "1.0.0"
+priority = 10
+
+# Balatro 1.0.0i needs one extra closer for current SMODS' legacy badge loop.
+[[patches]]
+[patches.pattern]
+target = "functions/common_events.lua"
+pattern = '''if v == 'pinned_left' then info_queue[#info_queue+1] = {key = 'pinned_left', set = 'Other'} end
+        end
+    end'''
+position = "after"
+payload = "end"
+match_indent = true
+
+# Restore this legacy Joker's event-based behavior; modern SMODS expects a newer return path.
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''self.ability.yorick_discards = self.ability.yorick_discards - 1
+                        return nil, true'''
+position = "at"
+payload = "self.ability.yorick_discards = self.ability.yorick_discards - 1"
+match_indent = true
+
+# Balatro 1.0.0i does not define the deck-skin registry.
+[[patches]]
+[patches.pattern]
+target = "game.lua"
+pattern = "function Game:start_up()"
+position = "after"
+payload = "G.COLLABS = G.COLLABS or {options = {}, colour_palettes = {}, pos = {}}"
+match_indent = true
+
+# This build computes sell value in set_cost_value; SMODS expects set_sell_value.
+[[patches]]
+[patches.pattern]
+target = "card.lua"
+pattern = '''    self.sell_cost = math.max(1, math.floor(self.cost/2)) + (self.ability.extra_value or 0)
+end'''
+position = "at"
+payload = '''    self.sell_cost = math.max(1, math.floor(self.cost/2)) + (self.ability.extra_value or 0)
+end
+
+function Card:set_sell_value()
+    self.sell_cost = math.max(1, math.floor(self.cost/2)) + (self.ability.extra_value or 0)
+end'''
+match_indent = false
+
+# Retain the legacy top-of-deck draw order for SMODS' draw interception.
+[[patches]]
+[patches.pattern]
+target = "functions/state_events.lua"
+pattern = "local hand_space = math.min(#G.deck.cards, G.hand.config.card_limit - #G.hand.cards)"
+position = "after"
+payload = "local cards_to_draw = {}; for i = 1, hand_space do cards_to_draw[i] = G.deck.cards[#G.deck.cards - i + 1] end"
+match_indent = true
