@@ -1,11 +1,11 @@
 {
   "id": "PokerDefense",
-  "name": "Poker Defense POC",
+  "name": "Tower Defense MVP",
   "author": ["EgemennSahin"],
-  "description": "Played poker cards activate towers along a small defense lane.",
+  "description": "Choose the Tower Defense deck to start an in-game lane defense run.",
   "prefix": "pdef",
   "main_file": "main.lua",
   "priority": 0,
-  "version": "0.1.0",
+  "version": "0.2.0",
   "dependencies": ["Steamodded (>=1.0.0~BETA-0711a)"]
 }

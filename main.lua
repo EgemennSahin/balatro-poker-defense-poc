@@ -132,14 +132,15 @@ end
 
 SMODS.Joker {
     key = 'lane_commander',
+    prefix_config = {atlas = false},
     atlas = 'Joker',
     pos = {x = 0, y = 0},
     rarity = 1,
-    weight = 100,
     cost = 4,
     blueprint_compat = false,
+    in_pool = function(self, args) return false end,
     loc_txt = {
-        name = 'Lane Commander',
+        name = 'Defense Board',
         text = {
             'The first 8 scored cards become towers',
             'Played poker hands activate their towers',
@@ -152,6 +153,11 @@ SMODS.Joker {
         return {vars = {state and math.min(state.wave, MAX_WAVES) or 1, state and state.lives or 10}}
     end,
     calculate = function(self, card, context)
+        if context.setting_blind and not context.blueprint then
+            G.GAME.poker_defense = G.GAME.poker_defense or new_state()
+            sendDebugMessage('Defense run started', 'PokerDefense')
+            return {message = 'Defend!', colour = G.C.BLUE}
+        end
         if context.before and not context.blueprint then
             G.GAME.poker_defense = G.GAME.poker_defense or new_state()
             local state = G.GAME.poker_defense
@@ -165,6 +171,28 @@ SMODS.Joker {
                 or (damage .. ' Damage')
             return {chips = damage, message = message, colour = G.C.CHIPS}
         end
+    end,
+}
+
+SMODS.Back {
+    key = 'tower_defense',
+    prefix_config = {atlas = false},
+    atlas = 'centers',
+    pos = {x = 0, y = 0},
+    unlocked = true,
+    discovered = true,
+    config = {jokers = {'j_pdef_lane_commander'}},
+    loc_txt = {
+        name = 'Tower Defense',
+        text = {
+            'Start with the Defense Board',
+            'Play cards to build and fire towers',
+            'Survive five enemy waves',
+        },
+    },
+    apply = function(self, back)
+        G.GAME.poker_defense = new_state()
+        sendDebugMessage('Tower Defense deck selected', 'PokerDefense')
     end,
 }
 
